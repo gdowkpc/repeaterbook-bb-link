@@ -38,8 +38,18 @@
 enum hardware_board_t {
   hardware_board_unknown = 0,
   hardware_board_tinypico = 1,
-  hardware_board_pico32 = 2
+  hardware_board_pico32 = 2,
+  hardware_board_devkitc32e = 128 // local experimental target; not an upstream OTA identity
 };
+
+#if defined(BB_LINK_DEVKITC_32E)
+#if !defined(ARDUINO_ESP32_DEV) || !defined(CONFIG_IDF_TARGET_ESP32)
+#error "DevKitC-32E requires the original ESP32 Dev Module target."
+#endif
+#define HARDWARE_BOARD hardware_board_devkitc32e
+#define HARDWARE_VERSION_MAJOR 1
+#define HARDWARE_VERSION_MINOR 0
+#endif
 
 #if defined(ARDUINO_TINYPICO)
 #define HARDWARE_BOARD hardware_board_tinypico

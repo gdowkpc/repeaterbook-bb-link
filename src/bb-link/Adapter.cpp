@@ -79,7 +79,9 @@ String Adapter::getAdapterName()
 void Adapter::init()
 {
   Log.traceln("Adapter: init");
+#if defined(ARDUINO_TINYPICO)
   pinMode(VBUS_SENSE_GPIO, INPUT);
+#endif
 
   statusIndicator.init();
   touchButton.init();
@@ -271,6 +273,11 @@ void Adapter::onShortPressed()
 */
 void Adapter::onWrite(BLECharacteristic *pCharacteristic)
 {
+#if defined(BB_LINK_DEVKITC_32E)
+  // Preserve Configurator identity reads, but prevent unsuitable upstream OTA images.
+  Log.warningln("DevKitC-32E test firmware: update over USB only");
+  return;
+#endif
   std::string rxData = pCharacteristic->getValue();
 
   if (!adapterStateMachine.isInState(otaFlashState))

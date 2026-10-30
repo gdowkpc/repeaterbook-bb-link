@@ -83,7 +83,11 @@ private:
   uint8_t remoteAddress[ESP_BD_ADDR_LEN];
   char remoteName[MAX_BTC_DEVICE_NAME_LEN];
   bool connectToPairedDevice = false;
+  #if defined(BB_LINK_DEVKITC_32E)
+  bool useRigControl = false;
+#else
   bool useRigControl = true;
+#endif
 
   Preferences preferences;
   ArduinoQueue<extended_hw_cmd_t> cmdQueue;

@@ -80,7 +80,11 @@ bool Bridge::init()
   txLingerUntil = millis();
 
   preferences.begin(PREFERENCES_NAMESPACE, false);
+  #if defined(BB_LINK_DEVKITC_32E)
+  useRigControl = preferences.getBool(PREF_RIG_CTRL, false);
+#else
   useRigControl = preferences.getBool(PREF_RIG_CTRL, true);
+#endif
   preferences.end();
 
   Log.infoln("Use rig control: %s", useRigControl ? "true" : "false");
@@ -144,7 +148,11 @@ void Bridge::factoryReset()
   preferences.begin(PREFERENCES_NAMESPACE, false);
   preferences.clear();
   preferences.end();
+  #if defined(BB_LINK_DEVKITC_32E)
+  useRigControl = false;
+  #else
   useRigControl = true;
+  #endif
   connectToPairedDevice = false;
 
   // Restart the device
